@@ -1,13 +1,13 @@
 # MAD9022 - GEOLOCATION
 -----------------------------
-## Author
+###Author###
 
 Nune Vardanyan (E-mail: vard0020@algonquinlive.com)
-##Version
+###Version###
 1.0.0 (last modified: January 31, 2015)
-##License
+###License###
 _MAD&D NuneVardanyan Inc._
-## Description
+###Description###
 This webpage is designed to return a device's location and show it based on actual GPS data, ISP, IP address, or wi-fi network. The user will always be prompted by the browser for permission to access their location. If they hit **YES** the webpage will load a google STATIC map that includes a marker at the center of the map. 
 Below the map the user will see all he GPS info including: 
 
@@ -22,7 +22,7 @@ Below the map the user will see all he GPS info including:
 
 If the device/browser does not support geolocation or the user refuses to accept the browser prompt message, then the page will display a corresponding feedback message back to the user.
 
-##Instructions
+###Instructions###
 
 The process of fetching GPS data and displaying it to the user involves the following steps:
 
@@ -90,15 +90,15 @@ function gpsError( error ){
   alert("Error: " + errors[error.code]);
 }
 ```
-##Useful links on Geolocation
+###Useful links on Geolocation###
 
- [www.html5doctor.com](http://html5doctor.com/finding-your-position-with-geolocation/)
+ [www.html5doctor.com/finding-your-position-with-geolocation/](http://html5doctor.com/finding-your-position-with-geolocation/)
  
- [www.developer.mozilla.org](https://developer.mozilla.org/en/docs/WebAPI/Using_geolocation/) 
+ [www.developer.mozilla.org/en/docs/WebAPI/Using_geolocation/](https://developer.mozilla.org/en/docs/WebAPI/Using_geolocation/) 
  
- [www.sitepoint.com](http://www.sitepoint.com/html5-geolocation/) 
+ [www.sitepoint.com/html5-geolocation/](http://www.sitepoint.com/html5-geolocation/) 
  
- [www.diveintohtml5.info](http://diveintohtml5.info/geolocation.html/) 
+ [www.diveintohtml5.info/geolocation.html/](http://www.diveintohtml5.info/geolocation.html/) 
  
  
  
