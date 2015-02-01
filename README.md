@@ -1,116 +1,122 @@
-# mad9022-geolocation
+# MAD9022 - GEOLOCATION
+-----------------------------
+## Author
 
-=== Plugin Name ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: http://example.com/
-Tags: comments, spam
-Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Nune Vardanyan (E-mail: vard0020@algonquinlive.com)
+##Version
+1.0.0 (last modified: January 31, 2015)
+##License
+_MAD&D NuneVardanyan Inc._
+## Description
+This webpage is designed to return a device's location and show it based on actual GPS data, ISP, IP address, or wi-fi network. The user will always be prompted by the browser for permission to access their location. If they hit **YES** the webpage will load a google STATIC map that includes a marker at the center of the map. 
+Below the map the user will see all he GPS info including: 
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+  - *Latitude*
+  - *Longitude*
+  - *Occuracy*
+  - *Altitude*
+  - *Heading*
+  - *Speed*
+  - *Timestamp* 
+  
 
-== Description ==
+If the device/browser does not support geolocation or the user refuses to accept the browser prompt message, then the page will display a corresponding feedback message back to the user.
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+##Instructions
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+The process of fetching GPS data and displaying it to the user involves the following steps:
 
-A few notes about the sections above:
+**Step 1:**
+_Determine if the device / browser supports geolocation._
 
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
+```sh
+if( navigator.geolocation ){ 
+  //code goes here to find position
+}
+```
+**Step 2:**
+_Write the corresponding code to find the position._
 
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
+```sh
+var params = {enableHighAccuracy: true, timeout:360000, maximumAge:0};
+navigator.geolocation.getCurrentPosition( watchPosition, gpsError, params ); 
+```
+**Step 3:**
+_Create an HTML Canvas element, an image and draw the IMG to Canvas_
+```sh
+function reportPosition( position ){ 
+    var canvas = document.createElement("canvas");
+    canvas.id = "myCanvas";
+    canvas.width = 400;
+    canvas.height = 400;
+    document.body.appendChild(canvas);
+    var context = canvas.getContext('2d');
+    
+//creating and drawing image to Canvas element
+      var imageObj = document.createElement("img");
+      imageObj.onload = function() {
+      context.drawImage(imageObj, 0, 0);       
+};  
+```
+**Step 4:**
+_Refer to Google Static Maps and set the lattitude and longitude_
+```sh
+imageObj.src = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + ',' + position.coords.longitude + "&zoom=14&size=400x400&markers=color:red|label:T|" + position.coords.latitude + ',' + position.coords.longitude; 
+```
+**Step 5:**
+_Create an HTML output div element and add content and GPS parameters to it_
+```sh
+var output = document.createElement("div");
+    output.id = "output";
+    document.body.appendChild(output);
+  output.innerHTML += "</br>" + "Latitude: " + position.coords.latitude + "&deg;<br/>"
+  + "Longitude: " + position.coords.longitude + "&deg;<br/>"
+  + "Accuracy: " + position.coords.accuracy + "m<br/>"
+  + "Altitude: " + position.coords.altitude + " m<br/>"
+  + "Heading: " + position.coords.heading + " &deg;<br/>"
+  + "Speed: " + position.coords.speed + " m/s<br/>"
+  + "Timestamp: " + position.timestamp;
+}
+```
+**Step 6:**
+_Finally, add error callback function to handle the errors_
+```sh
+function gpsError( error ){
+  var errors = {
+    1: 'Permission denied',
+    2: 'Position unavailable',
+    3: 'Request timeout'
+  };
+  alert("Error: " + errors[error.code]);
+}
+```
+##Useful links on Geolocation
 
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
-
-== Installation ==
-
-This section describes how to install the plugin and get it working.
-
-e.g.
-
-1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
-
-== Frequently Asked Questions ==
-
-= A question that someone might have =
-
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
-
-== Screenshots ==
-
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets 
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png` 
-(or jpg, jpeg, gif).
-2. This is the second screen shot
-
-== Changelog ==
-
-= 1.0 =
-* A change since the previous version.
-* Another change.
-
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
-
-== Upgrade Notice ==
-
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+ [www.html5doctor.com](http://html5doctor.com/finding-your-position-with-geolocation/)
+ 
+ [www.developer.mozilla.org](https://developer.mozilla.org/en/docs/WebAPI/Using_geolocation/) 
+ 
+ [www.sitepoint.com](http://www.sitepoint.com/html5-geolocation/) 
+ 
+ [www.diveintohtml5.info](http://diveintohtml5.info/geolocation.html/) 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

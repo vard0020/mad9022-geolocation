@@ -46,7 +46,7 @@ function reportPosition( position ){
     
 }
 
-function gpsError( error ){   
+function gpsError( error ){
   var errors = {
     1: 'Permission denied',
     2: 'Position unavailable',
